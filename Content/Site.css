@@ -1,0 +1,296 @@
+﻿/* =========================================
+   Base template CSS (MVC default)
+   ========================================= */
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* =========================================
+   Light Green Background + Navbar
+   ========================================= */
+
+body {
+    background: linear-gradient(180deg, #ecfff0 0%, #f7fff9 60%, #ffffff 100%);
+    color: #11331b;
+}
+
+/* Make default MVC navbar look "light green" */
+.navbar-inverse {
+    background-color: rgba(180, 245, 195, 0.85);
+    border-color: rgba(30, 120, 60, 0.15);
+}
+
+    .navbar-inverse .navbar-brand,
+    .navbar-inverse .navbar-nav > li > a {
+        color: #0f3b1f !important;
+        font-weight: 600;
+    }
+
+        .navbar-inverse .navbar-brand:hover,
+        .navbar-inverse .navbar-nav > li > a:hover {
+            text-decoration: underline;
+        }
+
+/* =========================================
+   Global image safety (prevents overflow)
+   ========================================= */
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* =========================================
+   General Cards (used across Home page)
+   ========================================= */
+
+.card {
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(30,120,60,0.15);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    padding: 22px;
+}
+
+.section-gap {
+    margin-top: 22px;
+}
+
+.section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    margin: 0 0 12px 0;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.section-note {
+    color: #245a34;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* =========================================
+   HERO LANDING (top banner)
+   ========================================= */
+
+.hero-landing {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    min-height: 360px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(30,120,60,0.15);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    margin-top: 10px;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(10,45,24,0.86), rgba(10,45,24,0.25));
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    padding: 34px;
+    max-width: 680px;
+    color: #fff;
+}
+
+.hero-kicker {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 12px;
+}
+
+.hero-title {
+    margin: 0 0 10px 0;
+    font-size: 40px;
+    line-height: 1.15;
+}
+
+.hero-subtitle {
+    margin: 0 0 18px 0;
+    font-size: 16px;
+    opacity: 0.92;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.btn-ghost {
+    background: rgba(255,255,255,0.14) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,0.35) !important;
+}
+
+.hero-badges span {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* =========================================
+   FEATURE CARDS (3 columns)
+   ========================================= */
+
+.feature-card {
+    height: 100%;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(30,120,60,0.15);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.feature-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(46,204,113,0.18);
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #0f3b1f;
+}
+
+.feature-title {
+    margin: 0 0 6px 0;
+    font-weight: 800;
+    color: #11331b;
+}
+
+.feature-text {
+    margin: 0;
+    color: #245a34;
+}
+
+/* =========================================
+   DESTINATION CARDS (image + text)
+   ========================================= */
+
+.destination-card,
+.destination-card:hover,
+.destination-card:focus {
+    display: block;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(30,120,60,0.15);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    text-decoration: none !important;
+    color: inherit !important;
+    background: #fff;
+}
+
+    .destination-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+    }
+
+@supports not (object-fit: cover) {
+    .destination-card img {
+        height: auto;
+    }
+}
+
+.destination-body {
+    padding: 14px 16px;
+}
+
+    .destination-body h3 {
+        margin: 0 0 6px 0;
+        font-weight: 800;
+        color: #11331b;
+    }
+
+    .destination-body p {
+        margin: 0;
+        color: #245a34;
+    }
+
+/* =========================================
+   Group Members table styling
+   ========================================= */
+
+.green-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .green-table th {
+        text-align: left;
+        background: rgba(46,204,113,0.15);
+        padding: 12px;
+    }
+
+    .green-table td {
+        padding: 12px;
+        border-top: 1px solid rgba(30,120,60,0.12);
+    }
+
+/* =========================================
+   Mobile improvements
+   ========================================= */
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 30px;
+    }
+
+    .hero-content {
+        padding: 22px;
+    }
+
+    .destination-card img {
+        height: 160px;
+    }
+}

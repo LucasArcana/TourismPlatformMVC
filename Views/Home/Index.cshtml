@@ -1,0 +1,136 @@
+﻿@model IEnumerable<TourismPlatformMVC.Models.GroupMember>
+@{
+    ViewBag.Title = "Home";
+}
+
+<!-- HERO BANNER (online image - direct file, no redirects) -->
+<div class="hero-landing"
+     style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Mountain_panorama.jpg/1920px-Mountain_panorama.jpg')">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <div class="hero-kicker">Tourism Platform</div>
+
+            <h1 class="hero-title">Plan trips. Book tours. Explore more.</h1>
+
+            <p class="hero-subtitle">
+                Browse packages, book guided tours, and manage your bookings in one place.
+            </p>
+
+            <div class="hero-actions">
+                <a class="btn btn-success btn-lg" href="@Url.Action("Login","Account")">Login</a>
+                <a class="btn btn-default btn-lg btn-ghost" href="@Url.Action("Register","Account")">Sign Up</a>
+            </div>
+
+            <div class="hero-badges">
+                <span><span class="glyphicon glyphicon-lock"></span> Secure accounts</span>
+                <span><span class="glyphicon glyphicon-calendar"></span> Flexible dates</span>
+                <span><span class="glyphicon glyphicon-star"></span> Ratings &amp; feedback</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURES -->
+<div class="row section-gap">
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon"><span class="glyphicon glyphicon-user"></span></div>
+            <h3 class="feature-title">Profiles</h3>
+            <p class="feature-text">
+                Agencies &amp; tour guides can manage their services, images, and packages.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon"><span class="glyphicon glyphicon-ok-circle"></span></div>
+            <h3 class="feature-title">Easy Booking</h3>
+            <p class="feature-text">
+                Tourists can book tours, track status, and view booking history.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon"><span class="glyphicon glyphicon-comment"></span></div>
+            <h3 class="feature-title">Feedback</h3>
+            <p class="feature-text">
+                Collect ratings and reviews after each trip to improve experiences.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- POPULAR DESTINATIONS -->
+<div class="card section-gap">
+    <div class="section-head">
+        <h2 class="section-title">Popular Destinations</h2>
+        <div class="section-note">Sample showcase (database later)</div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <a class="destination-card" href="#">
+                <img loading="lazy"
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Aerial_-_Southern_Beaches.jpg/1280px-Aerial_-_Southern_Beaches.jpg"
+                     alt="Coastal destination" />
+                <div class="destination-body">
+                    <h3>Coastal Escapes</h3>
+                    <p>Beach tours, island trips, and sunset cruises.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-sm-4">
+            <a class="destination-card" href="#">
+                <img loading="lazy"
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Mountain_lake_panorama_-_Norway_-_panoramio.jpg/1280px-Mountain_lake_panorama_-_Norway_-_panoramio.jpg"
+                     alt="Mountain destination" />
+                <div class="destination-body">
+                    <h3>Mountain Adventures</h3>
+                    <p>Hiking, nature trails, and scenic viewpoints.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-sm-4">
+            <a class="destination-card" href="#">
+                <img loading="lazy"
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Vancouver_city_skyline.jpg/1280px-Vancouver_city_skyline.jpg"
+                     alt="City destination" />
+                <div class="destination-body">
+                    <h3>City Highlights</h3>
+                    <p>Culture walks, food tours, and landmarks.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- GROUP MEMBERS (REQUIREMENT) -->
+<div class="card section-gap">
+    <div class="section-head">
+        <h2 class="section-title">Group Members</h2>
+        <div class="section-note">Assessment requirement</div>
+    </div>
+
+    <table class="green-table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Full Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.StudentId</td>
+                    <td>@m.FullName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
