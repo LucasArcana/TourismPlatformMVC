@@ -294,3 +294,15 @@ img {
         height: 160px;
     }
 }
+.navbar .nav-item {
+    margin-right: 6px;
+}
+
+.navbar .nav-link {
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+    .navbar .nav-link:hover {
+        background: rgba(255,255,255,0.10);
+    }
