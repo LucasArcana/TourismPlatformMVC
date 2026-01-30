@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TourismPlatformMVC.Models.TourSchedule>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@if (ViewBag.TravelPackageId != null)
+{
+    <div class="alert alert-info">Showing schedules for selected package.</div>
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AvailableDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DurationDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupSizeLimit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TravelPackageId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvailableDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DurationDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupSizeLimit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TravelPackageId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.TourScheduleId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.TourScheduleId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.TourScheduleId })
+            </td>
+        </tr>
+    }
+
+</table>

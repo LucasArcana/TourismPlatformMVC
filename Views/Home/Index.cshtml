@@ -1,7 +1,16 @@
-﻿@model IEnumerable<TourismPlatformMVC.ViewModels.GroupMemberViewModel>
+﻿@model TourismPlatformMVC.ViewModels.HomeDashboardViewModel
+
+
 
 @{
-    ViewBag.Title = "Home";
+    ViewBag.Title = "Tourist Dashboard";
+}
+
+@if (TempData["SeedMessage"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["SeedMessage"]
+    </div>
 }
 
 <!-- HERO BANNER (online image - direct file, no redirects) -->
@@ -30,6 +39,18 @@
         </div>
     </div>
 </div>
+
+<!-- Temporary button -->
+
+@if (Request.IsAuthenticated)
+{
+    <div class="section-gap">
+        <a class="btn btn-default" href="@Url.Action("SeedDemoData","Home")">
+            Seed Demo Data (Debug)
+        </a>
+    </div>
+}
+
 
 <!-- FEATURES -->
 <div class="row section-gap">
@@ -67,48 +88,100 @@
 <!-- POPULAR DESTINATIONS -->
 <div class="card section-gap">
     <div class="section-head">
-        <h2 class="section-title">Popular Destinations</h2>
-        <div class="section-note">Sample showcase (database later)</div>
+        <h2 class="section-title">Featured Travel Packages</h2>
+        <div class="section-note">Latest packages from the database</div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-4">
-            <a class="destination-card" href="#">
-                <img loading="lazy"
-                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Aerial_-_Southern_Beaches.jpg/1280px-Aerial_-_Southern_Beaches.jpg"
-                     alt="Coastal destination" />
-                <div class="destination-body">
-                    <h3>Coastal Escapes</h3>
-                    <p>Beach tours, island trips, and sunset cruises.</p>
-                </div>
-            </a>
+    @if (Model.FeaturedPackages == null || !Model.FeaturedPackages.Any())
+    {
+        <div class="alert alert-info" style="margin:0;">
+            No travel packages found yet. Add some packages to see them here.
         </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var p in Model.FeaturedPackages)
+            {
+                <div class="col-sm-6 col-md-4">
+                    <div class="feature-card" style="height:100%;">
+                        <h3 class="feature-title" style="margin-top:0;">@p.Name</h3>
+                        <p class="feature-text" style="margin-bottom:10px;">
+                            <strong>Destination:</strong> @p.Destination
+                        </p>
+                        <p class="feature-text" style="margin-bottom:15px;">
+                            <strong>Price:</strong> @p.Price.ToString("C")
+                        </p>
 
-        <div class="col-sm-4">
-            <a class="destination-card" href="#">
-                <img loading="lazy"
-                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Mountain_lake_panorama_-_Norway_-_panoramio.jpg/1280px-Mountain_lake_panorama_-_Norway_-_panoramio.jpg"
-                     alt="Mountain destination" />
-                <div class="destination-body">
-                    <h3>Mountain Adventures</h3>
-                    <p>Hiking, nature trails, and scenic viewpoints.</p>
+                        <div>
+                            <a class="btn btn-success btn-sm"
+                               href="@Url.Action("Index", "TourSchedules")">
+                                View Details
+                            </a>
+                            <a class="btn btn-default btn-sm"
+                               href="@Url.Action("Index", "TourSchedules", new { travelPackageId = p.TravelPackageId })">
+                                See Dates
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </a>
+            }
         </div>
-
-        <div class="col-sm-4">
-            <a class="destination-card" href="#">
-                <img loading="lazy"
-                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Vancouver_city_skyline.jpg/1280px-Vancouver_city_skyline.jpg"
-                     alt="City destination" />
-                <div class="destination-body">
-                    <h3>City Highlights</h3>
-                    <p>Culture walks, food tours, and landmarks.</p>
-                </div>
-            </a>
-        </div>
-    </div>
+    }
 </div>
+
+<!-- TRAVEL PACKETS ) -->
+
+<div class="card section-gap">
+    <div class="section-head">
+        <h2 class="section-title">Upcoming Tour Schedules</h2>
+        <div class="section-note">Next available tours from @Model.Today.ToString("dd MMM yyyy")</div>
+    </div>
+
+    @if (Model.UpcomingSchedules == null || !Model.UpcomingSchedules.Any())
+    {
+        <div class="alert alert-info" style="margin:0;">
+            No upcoming tours available right now.
+        </div>
+    }
+    else
+    {
+        <table class="green-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Package</th>
+                    <th>Destination</th>
+                    <th>Duration</th>
+                    <th>Group Limit</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model.UpcomingSchedules)
+                {
+                    <tr>
+                        <td>@s.AvailableDate.ToString("dd MMM yyyy")</td>
+                        <td>@s.PackageName</td>
+                        <td>@s.Destination</td>
+                        <td>@s.DurationDays day(s)</td>
+                        <td>@s.GroupSizeLimit</td>
+                        <td>@s.Price.ToString("C")</td>
+                        <td style="white-space:nowrap;">
+                            <a class="btn btn-success btn-xs"
+                               href="@Url.Action("Create", "Bookings", new { tourScheduleId = s.TourScheduleId })">
+                                Book
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+
 
 <!-- GROUP MEMBERS (REQUIREMENT) -->
 <div class="card section-gap">
@@ -125,7 +198,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var m in Model)
+            @foreach (var m in Model.GroupMembers)
             {
                 <tr>
                     <td>@m.StudentId</td>

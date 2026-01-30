@@ -1,0 +1,64 @@
+﻿@model TourismPlatformMVC.Models.TourSchedule
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TourSchedule</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AvailableDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AvailableDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DurationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DurationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupSizeLimit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupSizeLimit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TravelPackageId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TravelPackageId)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

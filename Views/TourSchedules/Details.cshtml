@@ -1,0 +1,58 @@
+﻿@model TourismPlatformMVC.Models.TourSchedule
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TourSchedule</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AvailableDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AvailableDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DurationDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DurationDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupSizeLimit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupSizeLimit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TravelPackageId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TravelPackageId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TourScheduleId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

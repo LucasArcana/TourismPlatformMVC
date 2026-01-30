@@ -10,107 +10,121 @@ using TourismPlatformMVC.Models;
 
 namespace TourismPlatformMVC.Controllers
 {
-    public class TravelPackagesController : Controller
+    public class TourSchedulesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: TravelPackages
-        public ActionResult Index()
+        // GET: TourSchedules
+        public ActionResult Index(int? travelPackageId)
         {
-            return View(db.TravelPackages.ToList());
+            var query = db.TourSchedules.AsQueryable();
+
+            if (travelPackageId.HasValue)
+            {
+                query = query.Where(s => s.TravelPackageId == travelPackageId.Value);
+            }
+
+            var list = query
+                .OrderBy(s => s.AvailableDate)
+                .ToList();
+
+            ViewBag.TravelPackageId = travelPackageId;
+            return View(list);
         }
 
-        // GET: TravelPackages/Details/5
+        // GET: TourSchedules/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TravelPackage travelPackage = db.TravelPackages.Find(id);
-            if (travelPackage == null)
+            TourSchedule tourSchedule = db.TourSchedules.Find(id);
+            if (tourSchedule == null)
             {
                 return HttpNotFound();
             }
-            return View(travelPackage);
+            return View(tourSchedule);
         }
 
-        // GET: TravelPackages/Create
+        // GET: TourSchedules/Create
         public ActionResult Create()
         {
+            ViewBag.TravelPackageId = new SelectList(db.TravelPackages, "TravelPackageId", "Name");
             return View();
         }
 
-        // POST: TravelPackages/Create
+
+        // POST: TourSchedules/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TravelPackageId,Name,Destination,Price,AgencyId")] TravelPackage travelPackage)
+        public ActionResult Create([Bind(Include = "TourScheduleId,AvailableDate,DurationDays,Price,GroupSizeLimit,TravelPackageId")] TourSchedule tourSchedule)
         {
             if (ModelState.IsValid)
             {
-                db.TravelPackages.Add(travelPackage);
+                db.TourSchedules.Add(tourSchedule);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(travelPackage);
+            return View(tourSchedule);
         }
 
-        // GET: TravelPackages/Edit/5
+        // GET: TourSchedules/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TravelPackage travelPackage = db.TravelPackages.Find(id);
-            if (travelPackage == null)
+            TourSchedule tourSchedule = db.TourSchedules.Find(id);
+            if (tourSchedule == null)
             {
                 return HttpNotFound();
             }
-            return View(travelPackage);
+            return View(tourSchedule);
         }
 
-        // POST: TravelPackages/Edit/5
+        // POST: TourSchedules/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TravelPackageId,Name,Destination,Price,AgencyId")] TravelPackage travelPackage)
+        public ActionResult Edit([Bind(Include = "TourScheduleId,AvailableDate,DurationDays,Price,GroupSizeLimit,TravelPackageId")] TourSchedule tourSchedule)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(travelPackage).State = EntityState.Modified;
+                db.Entry(tourSchedule).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(travelPackage);
+            return View(tourSchedule);
         }
 
-        // GET: TravelPackages/Delete/5
+        // GET: TourSchedules/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TravelPackage travelPackage = db.TravelPackages.Find(id);
-            if (travelPackage == null)
+            TourSchedule tourSchedule = db.TourSchedules.Find(id);
+            if (tourSchedule == null)
             {
                 return HttpNotFound();
             }
-            return View(travelPackage);
+            return View(tourSchedule);
         }
 
-        // POST: TravelPackages/Delete/5
+        // POST: TourSchedules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            TravelPackage travelPackage = db.TravelPackages.Find(id);
-            db.TravelPackages.Remove(travelPackage);
+            TourSchedule tourSchedule = db.TourSchedules.Find(id);
+            db.TourSchedules.Remove(tourSchedule);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

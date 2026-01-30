@@ -1,0 +1,50 @@
+﻿@model TourismPlatformMVC.Models.TravelPackage
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TravelPackage</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Destination)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Destination)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AgencyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AgencyId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TravelPackageId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

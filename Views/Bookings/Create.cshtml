@@ -1,0 +1,86 @@
+﻿@model TourismPlatformMVC.Models.Booking
+
+@{
+    ViewBag.Title = "Create Booking";
+}
+
+<h2>Create Booking</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Booking</h4>
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <!-- Tourist -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.TouristId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(
+                    m => m.TouristId,
+                    (SelectList)ViewBag.TouristId,
+                    "-- Select Tourist --",
+                    new { @class = "form-control" }
+                )
+                @Html.ValidationMessageFor(m => m.TouristId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Tour Schedule -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.TourScheduleId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(
+                    m => m.TourScheduleId,
+                    (SelectList)ViewBag.TourScheduleId,
+                    "-- Select Schedule --",
+                    new { @class = "form-control" }
+                )
+                @Html.ValidationMessageFor(m => m.TourScheduleId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Participants -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.ParticipantsCount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.ParticipantsCount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.ParticipantsCount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Booking Status -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.BookingStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.BookingStatus, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.BookingStatus, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Payment Status -->
+        <div class="form-group">
+            @Html.LabelFor(m => m.PaymentStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.PaymentStatus, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.PaymentStatus, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-success" />
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

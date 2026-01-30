@@ -29,5 +29,16 @@ namespace TourismPlatformMVC.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<TourismPlatformMVC.Models.TravelPackage> TravelPackages { get; set; }
+
+        public System.Data.Entity.DbSet<TourismPlatformMVC.Models.TourSchedule> TourSchedules { get; set; }
+
+        public System.Data.Entity.DbSet<TourismPlatformMVC.Models.Booking> Bookings { get; set; }
+
+        public DbSet<AgencyProfile> AgencyProfiles { get; set; }
+        public DbSet<TouristProfile> TouristProfiles { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+
     }
 }
