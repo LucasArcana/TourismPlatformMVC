@@ -2,4 +2,165 @@
     ViewBag.Title = "Agency Dashboard";
 }
 <h2>Agency Dashboard</h2>
-<p>Coming soon...</p>
+<div class="row">
+    <!--Agency Profile-->
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-header"> <!--Creates card around table-->
+                Agency Profile
+            </div>
+            <div class="card-body">
+                <form id="agenProfForm" method="post" action="@Url.Action("SaveProfile", "Agency")"
+                      enctype="multipart/form-data" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label for="AgencyName">AgencyName</label>
+                        <textarea class="form-control" id="AgencyName" name="AgencyName"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Desc">Description</label>
+                        <textarea class="form-control" id="Desc" name="Desc" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ContEmail">Contact Email</label>
+                        <textarea class="form-control" id="ContEmail" name="ContEmail"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Address">Address</label>
+                        <textarea class="form-control" id="Address" name="Address"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Agency Image (ONE image only)</label>
+                        <input id="AgencyImage" name="AgencyImage" type="file" accept="image/*" class="form-control-file"/>
+                        <small class="form-text text-muted">Only one image is accepted. Max file size should be implemented server-side.</small>
+                        <div class="mt-2">
+                            <img id="AgencyImagePreview" src="#" alt="Preview" class="img-fluid d-none" style="max-height:200px"/><!--Include image in this section-->
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                        <a class="btn btn-secondary" href="@Url.Action("Edit", "Agency") ">Edit Profile</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--Quick actions in UI-->
+        <div class="card">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body">
+                <p>
+                    <a class="btn btn-success btn-block" href="@Url.Action("Create", "TourPackage")">Create New Tour Package</a>
+                </p>
+                <p>
+                    <a class="btn btn-outline-primary btn-block" href="@Url.Action("Index", "TravelPackages")">Manage Packages</a>
+                </p>
+                <p>
+                    <a class="btn btn-outline-primary btn-block" href="@Url.Action("Index", "TourSchedules")">Manage Tour Schedules</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!--Main area for all functions like packages, schedules, bookings, feedback, etc--> <!--Need to add links to specific pages for following "Url.Action"-->
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-header">
+                Travel Packages
+                <a class="btn btn-sm btn-success float-right" href="@Url.Action("Create", "TravelPackage")">Add Package</a>
+            </div>
+            <div class="card-body">
+                <!--Placeholder for loop using a model if available-->
+                <table class="table table-sm table-striped" id="packagesTable">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Short Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" class="text-muted">Package list not loaded.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Tour Schedules
+                <a class="btn btn-sm btn-success float-right" href="@Url.Action("Create","TourSchedules")">New Schedule</a>
+            </div>
+            <div class="card-body">
+                <!--Example layout for CRUD fields-->
+                <table class="table table-sm" id="schedulesTable">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Group Limit</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" class="text-muted">Schedule list not loaded.</td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Bookings
+                <small class="text-muted"> - update booking status & payment</small>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-hover" id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Booking #</th>
+                            <th>Customer</th>
+                            <th>Package</th>
+                            <th>Date</th>
+                            <th>Participants</th>
+                            <th>Booking Status</th>
+                            <th>Payment</th>
+                            <th>Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="8" class="text-muted">Bookings not loaded.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <small class="form-text text-muted mt-2">Booking status: Pending / Confirmed / Completed. 
+                Payment status: Pending / Paid</small>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Feedback</div>
+            <div class="card-body" id="feedbackList">
+                <!--Replace with server-rendered loop for feedback-->
+                <div class="list-group">
+                    <div class="list-group-item text-muted">Feedback list not loaded.</div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/agency-dashboard.js"></script>
+}
