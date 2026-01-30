@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -21,11 +22,26 @@ namespace TourismPlatformMVC.Controllers
         }
 
         // GET: Bookings/MyBookings
+        [Authorize]
         public ActionResult MyBookings()
         {
-            // prototype: just reuse Index for now
-            return RedirectToAction("Index");
+            var userId = User.Identity.GetUserId();
+
+            var tourist = db.TouristProfiles.FirstOrDefault(t => t.UserId == userId);
+            if (tourist == null)
+            {
+                TempData["Error"] = "Tourist profile not found. Please create your tourist profile first.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var myBookings = db.Bookings
+                .Where(b => b.TouristId == tourist.TouristId)
+                .OrderByDescending(b => b.CreatedAt)
+                .ToList();
+
+            return View(myBookings);
         }
+
 
         // GET: Bookings/Details/5
         public ActionResult Details(int? id)
@@ -44,14 +60,32 @@ namespace TourismPlatformMVC.Controllers
 
         // GET: Bookings/Create
         public ActionResult Create(int? tourScheduleId)
+            
         {
-            ViewBag.TouristId = new SelectList(db.TouristProfiles, "TouristId", "FullName");
+
+            var userId = User.Identity.GetUserId();
+            var tourist = db.TouristProfiles.FirstOrDefault(t => t.UserId == userId);
+
+            if (tourist == null)
+            {
+                tourist = new TouristProfile
+                {
+                    UserId = userId,
+                    FullName = User.Identity.Name // quick default
+                                                  // add other required fields here if your model has [Required]
+                };
+
+                db.TouristProfiles.Add(tourist);
+                db.SaveChanges();
+            }
+
             ViewBag.TourScheduleId = new SelectList(db.TourSchedules.OrderBy(s => s.AvailableDate),
                                                     "TourScheduleId", "TourScheduleId",
                                                     tourScheduleId);
 
             var booking = new Booking
             {
+                TouristId = tourist.TouristId,
                 TourScheduleId = tourScheduleId ?? 0,
                 ParticipantsCount = 1,
                 BookingStatus = BookingStatusEnum.Pending,
@@ -59,26 +93,47 @@ namespace TourismPlatformMVC.Controllers
                 CreatedAt = DateTime.Now
             };
 
+
             return View(booking);
         }
-
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TouristId,TourScheduleId,ParticipantsCount,BookingStatus,PaymentStatus")] Booking booking)
+        public ActionResult Create([Bind(Include = "TourScheduleId,ParticipantsCount")] Booking booking)
         {
+            // force TouristId from logged-in user (don’t trust the form)
+            var userId = User.Identity.GetUserId();
+            var tourist = db.TouristProfiles.FirstOrDefault(t => t.UserId == userId);
+
+            if (tourist == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Tourist profile not found.");
+            }
+
+            // server-side defaults (don’t trust the form)
+            booking.TouristId = tourist.TouristId;
+            booking.BookingStatus = BookingStatusEnum.Pending;
+            booking.PaymentStatus = PaymentStatusEnum.Unpaid;
+            booking.CreatedAt = DateTime.Now;
+
             if (ModelState.IsValid)
             {
-                booking.CreatedAt = DateTime.Now;
                 db.Bookings.Add(booking);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.TouristId = new SelectList(db.TouristProfiles, "TouristId", "FullName", booking.TouristId);
-            ViewBag.TourScheduleId = new SelectList(db.TourSchedules, "TourScheduleId", "TourScheduleId", booking.TourScheduleId);
+            // If validation fails, rebuild schedule dropdown only
+            ViewBag.TourScheduleId = new SelectList(
+                db.TourSchedules.OrderBy(s => s.AvailableDate),
+                "TourScheduleId",
+                "TourScheduleId",
+                booking.TourScheduleId
+            );
 
             return View(booking);
         }
+
 
         // GET: Bookings/Edit/5
         public ActionResult Edit(int? id)

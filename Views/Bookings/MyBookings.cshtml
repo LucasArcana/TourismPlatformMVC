@@ -1,5 +1,46 @@
-﻿@{
+﻿@model IEnumerable<TourismPlatformMVC.Models.Booking>
+
+@{
     ViewBag.Title = "My Bookings";
 }
+
 <h2>My Bookings</h2>
-<p>Coming soon...</p>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning">@TempData["Error"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have no bookings yet.</div>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>Booking ID</th>
+            <th>Schedule</th>
+            <th>Participants</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Created</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.BookingId</td>
+                <td>@item.TourScheduleId</td>
+                <td>@item.ParticipantsCount</td>
+                <td>@item.BookingStatus</td>
+                <td>@item.PaymentStatus</td>
+                <td>@item.CreatedAt.ToString("dd MMM yyyy")</td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.BookingId })
+                </td>
+            </tr>
+        }
+    </table>
+}
