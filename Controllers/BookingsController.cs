@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TourismPlatformMVC.Models;
 
@@ -13,12 +10,13 @@ namespace TourismPlatformMVC.Controllers
 {
     public class BookingsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Bookings
+        // (optional: keep public or restrict to admins later)
         public ActionResult Index()
         {
-            return View(db.Bookings.ToList());
+            return View(db.Bookings.OrderByDescending(b => b.CreatedAt).ToList());
         }
 
         // GET: Bookings/MyBookings
@@ -42,27 +40,22 @@ namespace TourismPlatformMVC.Controllers
             return View(myBookings);
         }
 
-
         // GET: Bookings/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Booking booking = db.Bookings.Find(id);
-            if (booking == null)
-            {
-                return HttpNotFound();
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var booking = db.Bookings.Find(id);
+            if (booking == null) return HttpNotFound();
+
             return View(booking);
         }
 
-        // GET: Bookings/Create
+        // GET: Bookings/Create?tourScheduleId=2
+        [Authorize]
         public ActionResult Create(int? tourScheduleId)
-            
         {
-
+            // Find or create TouristProfile for logged-in user (quick + functional)
             var userId = User.Identity.GetUserId();
             var tourist = db.TouristProfiles.FirstOrDefault(t => t.UserId == userId);
 
@@ -71,18 +64,27 @@ namespace TourismPlatformMVC.Controllers
                 tourist = new TouristProfile
                 {
                     UserId = userId,
-                    FullName = User.Identity.Name // quick default
-                                                  // add other required fields here if your model has [Required]
+                    FullName = User.Identity.Name,
+                    ContactNumber = "" // if your model requires it, put something simple
                 };
 
                 db.TouristProfiles.Add(tourist);
                 db.SaveChanges();
             }
 
-            ViewBag.TourScheduleId = new SelectList(db.TourSchedules.OrderBy(s => s.AvailableDate),
-                                                    "TourScheduleId", "TourScheduleId",
-                                                    tourScheduleId);
+            // Build schedule dropdown with nice text (package + destination + date)
+            var scheduleList = (from s in db.TourSchedules
+                                join p in db.TravelPackages on s.TravelPackageId equals p.TravelPackageId
+                                orderby s.AvailableDate
+                                select new
+                                {
+                                    s.TourScheduleId,
+                                    Text = p.Name + " (" + p.Destination + ") - " + s.AvailableDate.ToString("dd MMM yyyy")
+                                }).ToList();
 
+            ViewBag.TourScheduleId = new SelectList(scheduleList, "TourScheduleId", "Text", tourScheduleId);
+
+            // Defaults (don’t let user type these)
             var booking = new Booking
             {
                 TouristId = tourist.TouristId,
@@ -93,24 +95,25 @@ namespace TourismPlatformMVC.Controllers
                 CreatedAt = DateTime.Now
             };
 
-
             return View(booking);
         }
+
+        // POST: Bookings/Create
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TourScheduleId,ParticipantsCount")] Booking booking)
         {
-            // force TouristId from logged-in user (don’t trust the form)
             var userId = User.Identity.GetUserId();
             var tourist = db.TouristProfiles.FirstOrDefault(t => t.UserId == userId);
 
             if (tourist == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Tourist profile not found.");
+                TempData["Error"] = "Tourist profile not found. Please create your tourist profile first.";
+                return RedirectToAction("Index", "Home");
             }
 
-            // server-side defaults (don’t trust the form)
+            // Force safe values (never trust the form for these)
             booking.TouristId = tourist.TouristId;
             booking.BookingStatus = BookingStatusEnum.Pending;
             booking.PaymentStatus = PaymentStatusEnum.Unpaid;
@@ -120,39 +123,37 @@ namespace TourismPlatformMVC.Controllers
             {
                 db.Bookings.Add(booking);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["Success"] = "Booking created successfully!";
+                return RedirectToAction("MyBookings");
             }
 
-            // If validation fails, rebuild schedule dropdown only
-            ViewBag.TourScheduleId = new SelectList(
-                db.TourSchedules.OrderBy(s => s.AvailableDate),
-                "TourScheduleId",
-                "TourScheduleId",
-                booking.TourScheduleId
-            );
+            // Rebuild dropdown if invalid (same text list)
+            var scheduleList = (from s in db.TourSchedules
+                                join p in db.TravelPackages on s.TravelPackageId equals p.TravelPackageId
+                                orderby s.AvailableDate
+                                select new
+                                {
+                                    s.TourScheduleId,
+                                    Text = p.Name + " (" + p.Destination + ") - " + s.AvailableDate.ToString("dd MMM yyyy")
+                                }).ToList();
+
+            ViewBag.TourScheduleId = new SelectList(scheduleList, "TourScheduleId", "Text", booking.TourScheduleId);
 
             return View(booking);
         }
-
 
         // GET: Bookings/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Booking booking = db.Bookings.Find(id);
-            if (booking == null)
-            {
-                return HttpNotFound();
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var booking = db.Bookings.Find(id);
+            if (booking == null) return HttpNotFound();
+
             return View(booking);
         }
 
         // POST: Bookings/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "BookingId,TouristId,TourScheduleId,ParticipantsCount,BookingStatus,PaymentStatus,CreatedAt")] Booking booking)
@@ -169,15 +170,11 @@ namespace TourismPlatformMVC.Controllers
         // GET: Bookings/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Booking booking = db.Bookings.Find(id);
-            if (booking == null)
-            {
-                return HttpNotFound();
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var booking = db.Bookings.Find(id);
+            if (booking == null) return HttpNotFound();
+
             return View(booking);
         }
 
@@ -186,7 +183,7 @@ namespace TourismPlatformMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Booking booking = db.Bookings.Find(id);
+            var booking = db.Bookings.Find(id);
             db.Bookings.Remove(booking);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -194,10 +191,7 @@ namespace TourismPlatformMVC.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            if (disposing) db.Dispose();
             base.Dispose(disposing);
         }
     }

@@ -11,8 +11,7 @@
     @Html.AntiForgeryToken()
 
     @Html.HiddenFor(m => m.TouristId)
-    @Html.HiddenFor(m => m.BookingStatus)
-    @Html.HiddenFor(m => m.PaymentStatus)
+
 
     <div class="form-horizontal">
         <h4>Booking</h4>
@@ -24,7 +23,13 @@
         <div class="form-group">
             @Html.LabelFor(m => m.TourScheduleId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(m => m.TourScheduleId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.DropDownListFor(
+     m => m.TourScheduleId,
+     (SelectList)ViewBag.TourScheduleId,
+     "-- Select Schedule --",
+     new { @class = "form-control" }
+ )
+
                 @Html.ValidationMessageFor(m => m.TourScheduleId, "", new { @class = "text-danger" })
             </div>
         </div>

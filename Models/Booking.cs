@@ -19,8 +19,9 @@ namespace TourismPlatformMVC.Models
         [Required]
         public int TourScheduleId { get; set; }
 
-        [Range(1, 100)]
+        [Range(1, 10, ErrorMessage = "Participants must be between 1 and 10")]
         public int ParticipantsCount { get; set; }
+
 
         [Required]
         public BookingStatusEnum BookingStatus { get; set; }

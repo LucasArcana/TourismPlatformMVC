@@ -6,6 +6,10 @@
 
 <h2>My Bookings</h2>
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-warning">@TempData["Success"]</div>
+}
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-warning">@TempData["Error"]</div>
@@ -20,6 +24,7 @@ else
     <table class="table">
         <tr>
             <th>Booking ID</th>
+            <th>Tour Schedule</th>
             <th>Schedule</th>
             <th>Participants</th>
             <th>Status</th>
@@ -37,8 +42,8 @@ else
                 <td>@item.BookingStatus</td>
                 <td>@item.PaymentStatus</td>
                 <td>@item.CreatedAt.ToString("dd MMM yyyy")</td>
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.BookingId })
+
+                <td>@Html.ActionLink("Details", "Details", new { id = item.BookingId })
                 </td>
             </tr>
         }
