@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using TourismPlatformMVC.Models;
+using TourismPlatformMVC.ViewModels;
 
 namespace TourismPlatformMVC.Controllers
 {
@@ -8,11 +8,11 @@ namespace TourismPlatformMVC.Controllers
     {
         public ActionResult Index()
         {
-            var members = new List<GroupMember>
+            var members = new List<GroupMemberViewModel>
             {
-                new GroupMember { StudentId = "20021750", FullName = "Marcos Yukihiro Vieira Yamashita" },
-                new GroupMember { StudentId = "20028065", FullName = "GURJOT SINGH" },
-                new GroupMember { StudentId = "20032744", FullName = "Aven Matthew MAJELLANO" }
+                new GroupMemberViewModel { StudentId = "20021750", FullName = "Marcos Yukihiro Vieira Yamashita" },
+                new GroupMemberViewModel { StudentId = "20028065", FullName = "GURJOT SINGH" },
+                new GroupMemberViewModel { StudentId = "20032744", FullName = "Aven Matthew MAJELLANO" }
             };
 
             return View(members);

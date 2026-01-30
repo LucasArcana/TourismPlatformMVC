@@ -1,12 +1,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-public class Agency
-{
-    public int AgenId { get; set; }
-    public string AgencyName { get; set; }
-    public string Desc { get; set; }
-    public string ContEmail { get; set; }
-    public string PhoneNo { get; set; }
-    public string Address { get; set; }
+    namespace TourismPlatformMVC.Models
+    {
+
+
+    public class AgencyProfile
+    {
+        [Key]
+        public int AgencyId { get; set; }         
+
+        public string AgencyName { get; set; }
+        public string ServicesOffered { get; set; }
+        public string Description { get; set; }
+
+        public string UserId { get; set; }        
+    }
+
 }
