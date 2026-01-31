@@ -73,14 +73,18 @@ namespace TourismPlatformMVC.Controllers
             }
 
             // Build schedule dropdown with nice text (package + destination + date)
-            var scheduleList = (from s in db.TourSchedules
-                                join p in db.TravelPackages on s.TravelPackageId equals p.TravelPackageId
-                                orderby s.AvailableDate
-                                select new
-                                {
-                                    s.TourScheduleId,
-                                    Text = p.Name + " (" + p.Destination + ") - " + s.AvailableDate.ToString("dd MMM yyyy")
-                                }).ToList();
+            var scheduleList = db.TourSchedules
+                .Join(db.TravelPackages,
+                    s => s.TravelPackageId,
+                    p => p.TravelPackageId,
+                    (s, p) => new { s. TourScheduleId, p.Name, p.Destination, s.AvailableDate })
+                    .OrderBy(x => x.AvailableDate)
+                    .AsEnumerable()
+                    .Select(x => new
+                    {
+                        x.TourScheduleId,
+                        Text = $"{x.Name} ({x.Destination}) - {x.AvailableDate.ToString("dd MMM yyyy")}"
+                    }).ToList();
 
             ViewBag.TourScheduleId = new SelectList(scheduleList, "TourScheduleId", "Text", tourScheduleId);
 

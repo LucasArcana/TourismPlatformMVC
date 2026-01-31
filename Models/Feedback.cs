@@ -10,7 +10,6 @@ namespace TourismPlatformMVC.Models
     {
         [Key]
         public int BookingId { get; set; }
-
         public int Rating { get; set; }
         public string Comment { get; set; }
         public DateTime CreatedDate { get; set; }

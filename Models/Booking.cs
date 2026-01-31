@@ -12,23 +12,16 @@ namespace TourismPlatformMVC.Models
     public class Booking
     {
         public int BookingId { get; set; }
-
         [Required]
         public int TouristId { get; set; }
-
         [Required]
         public int TourScheduleId { get; set; }
-
         [Range(1, 10, ErrorMessage = "Participants must be between 1 and 10")]
         public int ParticipantsCount { get; set; }
-
-
         [Required]
         public BookingStatusEnum BookingStatus { get; set; }
-
         [Required]
         public PaymentStatusEnum PaymentStatus { get; set; }
-
         public DateTime CreatedAt { get; set; }
     }
 }
